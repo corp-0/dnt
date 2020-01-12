@@ -6,3 +6,4 @@ import places
 import races
 import spells
 
+print()

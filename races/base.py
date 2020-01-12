@@ -1,6 +1,7 @@
 """
 Base class for races
 """
+from races.body import BodyBase
 
 class Base():
     name = str()
@@ -22,3 +23,6 @@ class Base():
     def add_penalties(self, character):
         for attribute in self.penalties.keys():
             character.att[attribute] = character.att[attribute] - self.penalties[attribute]
+
+    def __init__(self):
+        self.body = BodyBase()
