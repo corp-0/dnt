@@ -3,15 +3,16 @@ Base class for characters
 """
 import random
 import pickle
+from races.base import RaceBase
 
 #magic numbers
 CARRY_CAPACITY_MULTIPLICATOR = 11
 
 
-class Base():
+class CharacterBase():
     name = str()
     alive = True
-    race = None
+    race = RaceBase()
 
     strong_hand = None
 
@@ -49,8 +50,7 @@ class Base():
 
     spells = list()
 
-    side = None
-
+    party = list()
 
     def calculate_att_modifier(self):
         self.STR_mod = int((self.att["STR"] - 10) / 2)
@@ -122,22 +122,31 @@ class Base():
 
     def equip_item_to_hand(self, item, hand):
         if item.two_hands:
-            if self.hands[0].holding == None and self.hands[1].holding == None:
-                self.hands[0].holding = item
-                self.hands[1].holding = item
-                
-                if item in self.inventory:
-                    self.inventory.pop(item)
+            count_free_hands = 0
+            free_hands = []
+            for h in self.hands:
+                if h.holding == None:
+                    free_hands.append(hand)
+                    count_free_hands +=1
 
-                item.apply_effect(self)
+            if count_free_hands > 1:
+                for h in free_hands:
+                    h.holding = item
 
-                print(f"You take your {item.name} in both hands menacenly!")
-
-                return True
             else:
-                print(f"You need both hands free to hold {item.name}")
+                print(f"{item.name} need two hands to be held!")
 
                 return False
+
+                            
+            if item in self.inventory:
+                self.inventory.pop(item)
+
+            item.apply_effect(self)
+
+            print(f"You're now holding your {item.name}")
+
+            return True
 
         if hand.holding != None:
             print(f"{hand.desc} is already busy with {hand.holding.name}")
@@ -206,13 +215,13 @@ class Base():
 
         return serialized_chara
     
-    def deserialize_character(self, string):
+    def load_character(self, string):
         deserialized_chara = pickle.loads(string)
 
         return deserialized_chara
 
     def __init__(self):   
-        self.body = self.race.body
+        self.body = self.race.body()
         self.head = self.body.head
         self.r_hand = self.body.r_hand
         self.l_hand = self.body.l_hand
@@ -221,9 +230,9 @@ class Base():
         self.head.r_eye.night_vision = self.race.night_vision
         self.head.l_eye.night_vision = self.race.night_vision
 
-        self.hands = [self.r_hand, self.l_hand]
-        self.legs = [self.r_leg, self.l_leg]
-        self.eyes = [self.head.r_eye, self.head.l_eye]
+        self.hands = self.body.hands
+        self.legs = self.body.legs
+        self.eyes = self.body.eyes
 
         if self.name == "":
             self.name = random.choice(self.race.names)
@@ -240,10 +249,16 @@ class Base():
         self.calculate_carry_capacity()
         
         if self.strong_hand is None:
-            self.strong_hand = random.choice(self.hands)
+            handy = random.choice(self.hands)
+            handy.strong_hand = True
 
-        if self.side is None:
-            self.side = "HERO"
-        me = self
-        self.race.add_bonuses(me)
-        self.race.add_penalties(me)
+        self.strong_hand = list()
+        self.weak_hand = list()
+        for h in self.hands:
+            if h.strong_hand:
+                self.strong_hand.append(h)
+            else:
+                self.weak_hand.append(h)
+
+        self.race.add_bonuses(self)
+        self.race.add_penalties(self)

@@ -1,8 +1,8 @@
-from characters.base import Base
+from characters.base import CharacterBase
 from races.kobold import KoboldRace
 import random
 
-class Kobold(Base):
+class Kobold(CharacterBase):
     desc = """Kobolds are craven reptilian humanoids that commonly infest dungeons.
 They make up for their physical ineptitude with a cleverness for trap making
 """

@@ -1,6 +1,6 @@
-from races.base import Base
+from races.base import RaceBase
 
-class SkellyRace(Base):
+class SkellyRace(RaceBase):
     name = "Skelleton"
     desc = """Skelletons are undead warriors resucited by some evil dude who knows
 necromancy!."""

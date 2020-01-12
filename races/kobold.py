@@ -1,15 +1,21 @@
-from races.base import Base
+from races.base import RaceBase
 
-class KoboldRace(Base):
+class KoboldRace(RaceBase):
     name = "Kobold"
     desc = """Kobolds are some little reptilians dudes. They are not very strong, but
 they are quite intelligent and are known traps makers."""
 
     dice = 6
 
+
     night_vision = True
     cold_resistance = 1
     heat_resistance = 60
+
+    penalties = {
+        "Lizard fingers of Kobolds make it difficult to carry a lot of stuff":
+        "hero.carry_capacity = hero.carry_capacity - 5"
+    }
 
     names = [    
             "Ved", "Vod","Run","Marn","Mapla","Ohsi","Snepo","Nalli",

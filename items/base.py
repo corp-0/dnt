@@ -2,7 +2,7 @@
 Base class for items
 """
 
-class Base:
+class ItemBase:
     type_of = "ITEM"
     name = str()
     desc = str()

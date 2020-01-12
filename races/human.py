@@ -1,6 +1,6 @@
-from races.base import Base
+from races.base import RaceBase
 
-class HumanRace(Base):
+class HumanRace(RaceBase):
     name = "Human"
     desc = """Humans are the younger race to appear in this world, yet they are the more common to see.
     Humans are not very strong nor very intelligent, in comparison with other races and are quite fragile.
