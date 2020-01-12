@@ -6,6 +6,8 @@ import pickle
 from appdirs import AppDirs
 
 class Body():
+    wearing = None
+    
     def __init__(self):
         self.head = Head()
         self.chest = Chest()
@@ -13,9 +15,11 @@ class Body():
         self.l_hand = L_hand()
 
 class Head():
+    helmet = None
     desc = "Head"
 
 class Chest():
+    armor = None
     desc = "Chest"
 
 class Hand():
@@ -44,12 +48,20 @@ class L_hand(Hand):
     desc = "Left hand"
 
 
-class Chara():
+class Base():
     name = str()
     alive = True
     race = None
     body = Body()
-    strong_hand = body.r_hand
+
+    head = Head()
+    chest = Chest()
+    l_hand = L_hand()
+    r_hand = R_hand()
+
+    hands = [l_hand, r_hand]
+
+    strong_hand = None
 
     att = {
         "STR": int(),
@@ -79,13 +91,13 @@ class Chara():
     armor = 0
     shield = 0
 
-    hands = [body.r_hand, body.l_hand]
-
     inventory = list()
     carry_capacity = float()
     current_carry = float()
 
     spells = list()
+
+    side = None
 
 
     def calculate_att_modifier(self):
@@ -157,9 +169,16 @@ class Chara():
 
     def attack(self, target, hand):
         hand.used = True
+        if hand.holding == None:
+            weapon = "bare hand"
+        else:
+            weapon = hand.holding.name
         dmg = self.calculate_attack_damage(hand)
 
-        target.receive_damage(dmg)
+        print(f"{self.name} uses his {weapon} to attack {target.name}!")
+        print(f"{self.name}'s attack deals {dmg} points of damage on {target.name}'")
+
+        target.receive_damage(dmg, self)
     
     def calculate_attack_damage(self, hand):
         if hand.holding == None:
@@ -172,7 +191,7 @@ class Chara():
             self.alive = False
             print(f"{self.name} has died!")
             attacker.fame = attacker.fame + self.fame
-            print(f"{attacker.name} is granted with {self.fame} points of fame!")
+            print(f"{attacker.name} is granted {self.fame} points of fame!")
             del self
         elif damage < self.AC:
             print(f"{attacker.name}'s attack makes no effect on {self.name}!'")
@@ -191,38 +210,42 @@ class Chara():
 
         return deserialized_chara
 
-    def create_new_character(self,name:str, race:object, 
+    def __init__(self, name:str, race:object, 
                             STR:int, DEX:int, CON:int, INT:int, WIS:int,CHAR:int, 
                             side=None, strong_hand=None):
         
-        new_chara = Chara()
-        new_chara.name = name
-        new_chara.race = race
-        new_chara.att["STR"] = STR
-        new_chara.att["DEX"] = DEX
-        new_chara.att["CON"] = CON
-        new_chara.att["INT"] = INT
-        new_chara.att["WIS"] = WIS
-        new_chara.att["CHAR"] = CHAR
+        self.name = name
+        self.race = race
+        self.att["STR"] = STR
+        self.att["DEX"] = DEX
+        self.att["CON"] = CON
+        self.att["INT"] = INT
+        self.att["WIS"] = WIS
+        self.att["CHAR"] = CHAR
 
-        new_chara.calculate_att_modifier()
-        new_chara.calculate_max_hp()
-        new_chara.calculate_max_mana()
+        self.body = Body()
+        self.head = self.body.head
+        self.chest = self.body.chest
+        self.l_hand = self.body.l_hand
+        self.r_hand = self.body.r_hand
+        self.hands = [self.l_hand, self.r_hand]
 
-        new_chara.HP = new_chara.MAX_HP
-        new_chara.MP = new_chara.MAX_MP
+        self.calculate_att_modifier()
+        self.MAX_HP = self.calculate_max_hp()
+        self.MAX_MP = self.calculate_max_mana()
 
-        new_chara.race.add_bonuses()
+        self.HP = self.MAX_HP
+        self.MP = self.MAX_MP
+
+        self.race.add_bonuses(self)
+        self.race.add_penalties(self)
         
         if strong_hand is None:
-            new_chara.strong_hand = random.choice(self.hands)
+            self.strong_hand = random.choice(self.hands)
         else:
-            new_chara.strong_hand = strong_hand
+            self.strong_hand = strong_hand
 
-        if new_chara.side is None:
-            new_chara.side = "HERO"
+        if self.side is None:
+            self.side = "HERO"
         else:
-            new_chara.side = side
-
-        return new_chara
-
+            self.side = side

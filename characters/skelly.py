@@ -1,7 +1,7 @@
-from characters.base import Chara
+from characters.base import Base
 import random
 
-class Skelly(Chara):
+class Skelly(Base):
     desc = """Spooky scary skelletons!"""    
     fame = 10
 

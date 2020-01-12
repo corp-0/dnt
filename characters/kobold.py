@@ -1,13 +1,8 @@
-from characters.base import Chara
+from characters.base import Base
+from races.kobold import KoboldRace
 import random
 
-class Kobold(Chara):
-    desc = """Kobolds are craven reptilian humanoids that commonly infest dungeons.
-They make up for their physical ineptitude with a cleverness for trap making
-"""    
-    fame = 5
-
-    names = [    
+names = [    
             "Ved", "Vod","Run","Marn","Mapla","Ohsi","Snepo","Nalli",
             "Erko","Zale","Natt","Sid","Nos","Regs","Narpu","Kagne",
             "Nirku","Zihru","Uba","Rekde","Koss","Nud","Tuv","Varn",
@@ -18,15 +13,17 @@ They make up for their physical ineptitude with a cleverness for trap making
             "Rupli","Kahsa","Kodu","Uggo"
             ]
 
-    def __init__(self):
-        args = [
-            random.choice(self.names),
-            None,
-            7,
-            15,
-            9,
-            8,
-            7,
-            8
-        ]
-        self.create_new_character(*args)
+name = random.choice(names)
+race = KoboldRace
+STR = 7
+DEX = 15
+CON = 9
+INT = 8
+WIS = 7
+CHAR = 8
+
+class Kobold(Base):
+    desc = """Kobolds are craven reptilian humanoids that commonly infest dungeons.
+They make up for their physical ineptitude with a cleverness for trap making
+"""    
+    fame = 5
