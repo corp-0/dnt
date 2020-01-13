@@ -4,6 +4,8 @@ Base class for characters
 import random
 import pickle
 from races.base import RaceBase
+from inspect import getmembers, isclass
+import skills
 
 #magic numbers
 CARRY_CAPACITY_MULTIPLICATOR = 11
@@ -49,7 +51,7 @@ class CharacterBase():
     current_carry = float()
 
     spells = list()
-
+    skills = list()
     party = list()
 
     def calculate_att_modifier(self):
@@ -262,3 +264,8 @@ class CharacterBase():
 
         self.race.add_bonuses(self)
         self.race.add_penalties(self)
+
+        for name, obj in getmembers(skills):
+            if isclass(obj) and hasattr(obj, "public"):
+                if obj.public:
+                    self.skills.append(obj)

@@ -5,5 +5,6 @@ import equipment
 import places
 import races
 import spells
+import altered_states
 
 print()
