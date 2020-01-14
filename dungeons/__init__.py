@@ -1,7 +1,7 @@
 """
 Classes of the dungeons in the game.
 
-Base class is dungeons.Base()
+Base class is dungeons.DungeonBase()
 """
 
 from os.path import dirname, basename, isfile, join

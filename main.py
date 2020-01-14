@@ -7,4 +7,8 @@ import races
 import spells
 import altered_states
 
-print()
+
+while True:
+    choice = input(">> ")
+    exec(choice)
+
