@@ -107,7 +107,6 @@ class DungeonBase():
     max_rooms = int()
     rooms = list()
     current_room = None
-    room_id = 0
 
     enemy_pool = list()
 
