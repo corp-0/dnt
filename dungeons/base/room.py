@@ -1,5 +1,5 @@
 from abc import ABC
-from .interface.create_door import CreateRandomDoors
+from dungeons.interfaces.create_door import CreateRandomDoors
 import weakref
 
 class Room(ABC, CreateRandomDoors):

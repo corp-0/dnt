@@ -1,4 +1,4 @@
-from base.dungeon import Dungeon
+from dungeons.base.dungeon import Dungeon
 from dungeons.default_room import DefaultRoom
 
 class DefaultDungeon(Dungeon):

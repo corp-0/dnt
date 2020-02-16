@@ -1,6 +1,6 @@
 import abc
 import random
-from base.door import Cardinal
+from dungeons.base.door import Cardinal
 
 class ICreateDoors():
     """Interface for create_doors() method"""

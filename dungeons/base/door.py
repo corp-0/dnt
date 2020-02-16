@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod, ABCMeta
-from .interface.create_room import NavigateToRandomRoom
+from dungeons.interfaces.create_room import NavigateToRandomRoom
 from enum import Enum
 import weakref
 
 class Cardinal(Enum):
+    """ENUM containing Cardinals"""
+    
     NORTH = 1
     EAST = 2
     SOUTH = 3

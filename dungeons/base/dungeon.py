@@ -1,5 +1,5 @@
 from abc import ABC
-from .interface.create_room import Choose_from_pool
+from dungeons.interfaces.create_room import Choose_from_pool
 import random
 
 
